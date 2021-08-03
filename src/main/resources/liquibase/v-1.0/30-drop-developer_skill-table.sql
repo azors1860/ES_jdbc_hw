@@ -1,0 +1,1 @@
+drop table "developer_skill";

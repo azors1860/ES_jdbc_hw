@@ -1,0 +1,68 @@
+package services;
+
+import lombok.NonNull;
+import models.Skill;
+import repository.SkillRepository;
+import repository.exception.RepositoryException;
+import repository.exception.UnknownItemException;
+
+public class SkillService {
+
+    private final SkillRepository repository;
+
+    public SkillService(SkillRepository repository) {
+        this.repository = repository;
+    }
+
+    /**
+     * Добавить навык.
+     * @param nameSkill - название навыка.
+     * @throws RepositoryException - возникает в случае проблем с БД.
+     */
+    public void addSkill(@NonNull String nameSkill) throws RepositoryException {
+        if (nameSkill.equals("")){
+            newThrowIllegalArgumentException("nameSkill(название навыка)");
+        }
+        Skill skill = new Skill(nameSkill);
+        repository.create(skill);
+    }
+
+    /**
+     * Удалить навык по id.
+     * @param id - идентификатор навыка.
+     * @throws RepositoryException - возникает в случае проблем с БД.
+     * @throws UnknownItemException - возникает в случае, если объект с указанным id не найден.
+     */
+    public void deleteSkill(int id) throws RepositoryException, UnknownItemException {
+        repository.delete(id);
+    }
+
+    /**
+     * Переименовать навык по id.
+     * @param id - идентификатор навыка.
+     * @param name - имя навыка.
+     * @throws RepositoryException - возникает в случае проблем с БД.
+     * @throws UnknownItemException - возникает в случае, если объект с указанным id не найден.
+     */
+    public void renameSkill(int id, @NonNull String name) throws RepositoryException, UnknownItemException {
+        if (name.equals("")){
+            newThrowIllegalArgumentException("name(название навыка)");
+        }
+        Skill updateSkill = new Skill(id, name);
+        repository.update(updateSkill);
+    }
+
+    /**
+     * Получить навык по id.
+     * @param id - идентификатор навыка.
+     * @throws RepositoryException - возникает в случае проблем с БД.
+     * @throws UnknownItemException - возникает в случае, если объект с указанным id не найден.
+     */
+    public Skill getSkill(int id) throws UnknownItemException, RepositoryException {
+       return repository.read(id);
+    }
+
+    private void newThrowIllegalArgumentException(String nameStr){
+        throw new IllegalArgumentException("Строка " + nameStr +" не может быть пустой!");
+    }
+}
