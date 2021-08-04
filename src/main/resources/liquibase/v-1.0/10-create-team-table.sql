@@ -1,3 +1,3 @@
-create table "team" (
- "id" SERIAL PRIMARY KEY,
- "team_status" text not null);
+create table `team` (
+ `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+ `team_status` varchar(255) not null);

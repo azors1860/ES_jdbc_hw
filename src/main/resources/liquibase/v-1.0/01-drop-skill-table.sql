@@ -1,1 +1,1 @@
-drop table skill;
+drop table `skill`;

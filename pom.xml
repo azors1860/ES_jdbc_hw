@@ -24,8 +24,8 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>4.4.0</version>
                 <configuration>
-                    <propertyFile>liquibase\liquibase.properties</propertyFile>
-                    <changeLogFile>liquibase\master.xml</changeLogFile>
+                    <propertyFile>src\main\resources\liquibase\liquibase.properties</propertyFile>
+                    <changeLogFile>src\main\resources\liquibase\master.xml</changeLogFile>
                     <!-- log  -->
                     <verbose>true</verbose>
                     <logging>debug</logging>
@@ -68,6 +68,14 @@
             <version>42.2.5</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.21</version>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
             <groupId>junit</groupId>
@@ -91,6 +99,8 @@
         </dependency>
 
     </dependencies>
+
+
 
 
 

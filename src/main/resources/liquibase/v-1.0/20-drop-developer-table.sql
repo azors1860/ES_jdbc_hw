@@ -1,1 +1,1 @@
-drop table "developer";
+drop table `developer`;

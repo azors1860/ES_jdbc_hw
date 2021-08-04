@@ -1,1 +1,1 @@
-drop table "developer_skill";
+drop table `developer_skill`;
