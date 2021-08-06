@@ -1,13 +1,13 @@
-package controllers;
+package controller;
 
-import models.Developer;
-import models.Skill;
+import model.Developer;
+import model.Skill;
 import repository.DeveloperRepository;
 import repository.SkillRepository;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
-import services.DeveloperService;
-import services.SkillService;
+import service.DeveloperService;
+import service.SkillService;
 import view.View;
 
 import java.util.ArrayList;

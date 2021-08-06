@@ -1,7 +1,7 @@
-package services;
+package service;
 
-import models.Team;
-import models.TeamStatus;
+import model.Team;
+import model.TeamStatus;
 import org.junit.Test;
 import org.mockito.Mockito;
 

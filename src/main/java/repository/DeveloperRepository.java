@@ -1,8 +1,8 @@
 package repository;
 
 import lombok.NonNull;
-import models.Developer;
-import models.Skill;
+import model.Developer;
+import model.Skill;
 import repository.exception.RepositoryException;
 import repository.exception.SqlSkillForDeveloperException;
 import repository.exception.UnknownItemException;

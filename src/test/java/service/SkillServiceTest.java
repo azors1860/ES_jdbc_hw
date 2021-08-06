@@ -1,6 +1,6 @@
-package services;
+package service;
 
-import models.Skill;
+import model.Skill;
 import org.junit.Test;
 import org.mockito.Mockito;
 import repository.SkillRepository;

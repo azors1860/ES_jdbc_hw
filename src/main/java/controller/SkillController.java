@@ -1,9 +1,9 @@
-package controllers;
+package controller;
 
 import repository.SkillRepository;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
-import services.SkillService;
+import service.SkillService;
 import view.View;
 
 public class SkillController {

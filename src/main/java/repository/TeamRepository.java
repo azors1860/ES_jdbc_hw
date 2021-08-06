@@ -1,9 +1,9 @@
 package repository;
 
 import lombok.NonNull;
-import models.Developer;
-import models.Team;
-import models.TeamStatus;
+import model.Developer;
+import model.Team;
+import model.TeamStatus;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 

@@ -1,7 +1,7 @@
-package services;
+package service;
 
-import models.Developer;
-import models.Skill;
+import model.Developer;
+import model.Skill;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

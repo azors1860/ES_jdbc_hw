@@ -1,7 +1,7 @@
-package services;
+package service;
 
-import models.Team;
-import models.TeamStatus;
+import model.Team;
+import model.TeamStatus;
 import repository.TeamRepository;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;

@@ -1,7 +1,7 @@
 package repository;
 
 import lombok.NonNull;
-import models.Skill;
+import model.Skill;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 

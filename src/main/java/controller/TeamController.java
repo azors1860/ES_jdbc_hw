@@ -1,9 +1,9 @@
-package controllers;
+package controller;
 
 import repository.TeamRepository;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
-import services.TeamService;
+import service.TeamService;
 import view.View;
 
 public class TeamController {

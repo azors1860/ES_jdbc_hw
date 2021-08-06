@@ -1,8 +1,8 @@
 package view;
 
-import controllers.DeveloperController;
-import controllers.SkillController;
-import controllers.TeamController;
+import controller.DeveloperController;
+import controller.SkillController;
+import controller.TeamController;
 
 public class ConsoleProgramme {
     View view = new View();
