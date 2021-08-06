@@ -3,7 +3,7 @@ package service;
 import model.Skill;
 import org.junit.Test;
 import org.mockito.Mockito;
-import repository.SkillRepository;
+import repository.impl.SkillRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.when;
 
 public class SkillServiceTest {
 
-    SkillRepository repository = Mockito.mock(SkillRepository.class);
+    SkillRepositoryImpl repository = Mockito.mock(SkillRepositoryImpl.class);
     SkillService service = new SkillService(repository);
 
     @Test

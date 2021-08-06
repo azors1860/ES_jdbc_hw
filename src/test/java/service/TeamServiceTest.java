@@ -7,7 +7,7 @@ import org.mockito.Mockito;
 
 import static org.mockito.Mockito.verify;
 import static org.junit.Assert.assertEquals;
-import repository.TeamRepository;
+import repository.impl.TeamRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 
@@ -17,7 +17,7 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 public class TeamServiceTest {
-    TeamRepository repository = Mockito.mock(TeamRepository.class);
+    TeamRepositoryImpl repository = Mockito.mock(TeamRepositoryImpl.class);
     TeamService service = new TeamService(repository);
     List<Team> teams = new ArrayList<>();
 

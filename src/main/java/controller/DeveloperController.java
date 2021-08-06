@@ -2,8 +2,8 @@ package controller;
 
 import model.Developer;
 import model.Skill;
-import repository.DeveloperRepository;
-import repository.SkillRepository;
+import repository.impl.DeveloperRepositoryImpl;
+import repository.impl.SkillRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 import service.DeveloperService;
@@ -16,8 +16,8 @@ import java.util.List;
 public class DeveloperController {
 
     private final View view = new View();
-    private final DeveloperService developerService = new DeveloperService(new DeveloperRepository());
-    private final SkillService skillService = new SkillService(new SkillRepository());
+    private final DeveloperService developerService = new DeveloperService(new DeveloperRepositoryImpl());
+    private final SkillService skillService = new SkillService(new SkillRepositoryImpl());
 
     public void addDeveloper() {
         String lastName = view.inputText("Введите фамилию разработчика: ", false);

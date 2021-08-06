@@ -1,13 +1,13 @@
 package controller;
 
-import repository.TeamRepository;
+import repository.impl.TeamRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 import service.TeamService;
 import view.View;
 
 public class TeamController {
-    private final TeamService service = new TeamService(new TeamRepository());
+    private final TeamService service = new TeamService(new TeamRepositoryImpl());
     private final View view = new View();
 
     public void printTeam() {

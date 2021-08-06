@@ -1,13 +1,13 @@
 package controller;
 
-import repository.SkillRepository;
+import repository.impl.SkillRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 import service.SkillService;
 import view.View;
 
 public class SkillController {
-    private final SkillService service = new SkillService(new SkillRepository());
+    private final SkillService service = new SkillService(new SkillRepositoryImpl());
     private final View view = new View();
 
     public void printSkill(){

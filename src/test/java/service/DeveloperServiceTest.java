@@ -5,7 +5,7 @@ import model.Skill;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import repository.DeveloperRepository;
+import repository.impl.DeveloperRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 
 public class DeveloperServiceTest {
 
-    DeveloperRepository repository = Mockito.mock(DeveloperRepository.class);
+    DeveloperRepositoryImpl repository = Mockito.mock(DeveloperRepositoryImpl.class);
     DeveloperService service = new DeveloperService(repository);
     List<Developer> developers;
 

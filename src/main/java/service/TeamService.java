@@ -2,14 +2,14 @@ package service;
 
 import model.Team;
 import model.TeamStatus;
-import repository.TeamRepository;
+import repository.impl.TeamRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 
 public class TeamService {
-    private final TeamRepository repository;
+    private final TeamRepositoryImpl repository;
 
-    public TeamService(TeamRepository repository) {
+    public TeamService(TeamRepositoryImpl repository) {
         this.repository = repository;
     }
 

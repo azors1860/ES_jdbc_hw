@@ -3,7 +3,7 @@ package service;
 import lombok.NonNull;
 import model.Developer;
 import model.Skill;
-import repository.DeveloperRepository;
+import repository.impl.DeveloperRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 
@@ -11,9 +11,9 @@ import java.util.List;
 
 public class DeveloperService {
 
-    private final DeveloperRepository repository;
+    private final DeveloperRepositoryImpl repository;
 
-    public DeveloperService(DeveloperRepository repository) {
+    public DeveloperService(DeveloperRepositoryImpl repository) {
         this.repository = repository;
     }
 

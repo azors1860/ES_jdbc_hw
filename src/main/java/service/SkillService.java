@@ -2,15 +2,15 @@ package service;
 
 import lombok.NonNull;
 import model.Skill;
-import repository.SkillRepository;
+import repository.impl.SkillRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 
 public class SkillService {
 
-    private final SkillRepository repository;
+    private final SkillRepositoryImpl repository;
 
-    public SkillService(SkillRepository repository) {
+    public SkillService(SkillRepositoryImpl repository) {
         this.repository = repository;
     }
 
