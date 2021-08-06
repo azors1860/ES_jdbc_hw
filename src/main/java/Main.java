@@ -1,7 +1,7 @@
-import view.ConsoleProgramme;
+import view.ProgramView;
 
 public class Main {
     public static void main(String[] args) {
-        new ConsoleProgramme().runProgram();
+        new ProgramView().runProgram();
     }
 }

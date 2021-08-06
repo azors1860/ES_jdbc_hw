@@ -35,8 +35,8 @@ public class DeveloperService {
      * @param developer - добавляемый разработчик.
      * @throws RepositoryException  - возникает в случае проблем с БД.
      */
-    public void addDeveloper(@NonNull Developer developer) throws RepositoryException {
-        repository.create(developer);
+    public Developer addDeveloper(@NonNull Developer developer) throws RepositoryException {
+       return repository.create(developer);
     }
 
     /**
@@ -45,16 +45,15 @@ public class DeveloperService {
      * @param developer   - разработчик
      * @param newLastName - новая фамилия
      * @throws RepositoryException  - возникает в случае проблем с БД.
-     * @throws UnknownItemException - возникает в случае, если объект с указанным id не найден.
      */
-    public void renameLastName(@NonNull Developer developer, @NonNull String newLastName)
-            throws RepositoryException, UnknownItemException {
+    public Developer renameLastName(@NonNull Developer developer, @NonNull String newLastName)
+            throws RepositoryException {
 
         if (newLastName.equals("")) {
             newThrowIllegalArgumentException("newLastName(новая фамилия)");
         }
         developer.setLastName(newLastName);
-        repository.update(developer);
+       return repository.update(developer);
     }
 
     /**
@@ -63,16 +62,15 @@ public class DeveloperService {
      * @param developer    - разработчик.
      * @param newFirstName - новое имя.
      * @throws RepositoryException  - возникает в случае проблем с БД.
-     * @throws UnknownItemException - возникает в случае, если объект с указанным id не найден.
      */
-    public void renameFirstName(@NonNull Developer developer, @NonNull String newFirstName)
-            throws RepositoryException, UnknownItemException {
+    public Developer renameFirstName(@NonNull Developer developer, @NonNull String newFirstName)
+            throws RepositoryException {
 
         if (newFirstName.equals("")) {
             newThrowIllegalArgumentException("newFirstName(новое имя)");
         }
         developer.setFirstName(newFirstName);
-        repository.update(developer);
+       return repository.update(developer);
     }
 
     /**

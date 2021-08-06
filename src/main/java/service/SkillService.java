@@ -19,14 +19,15 @@ public class SkillService {
     /**
      * Добавить навык.
      * @param nameSkill - название навыка.
+     * @return - созданный навык.
      * @throws RepositoryException - возникает в случае проблем с БД.
      */
-    public void addSkill(@NonNull String nameSkill) throws RepositoryException {
+    public Skill addSkill(@NonNull String nameSkill) throws RepositoryException {
         if (nameSkill.equals("")){
             newThrowIllegalArgumentException("nameSkill(название навыка)");
         }
         Skill skill = new Skill(nameSkill);
-        repository.create(skill);
+       return repository.create(skill);
     }
 
     /**
@@ -43,15 +44,16 @@ public class SkillService {
      * Переименовать навык по id.
      * @param id - идентификатор навыка.
      * @param name - имя навыка.
+     * @return - изменённый навык.
      * @throws RepositoryException - возникает в случае проблем с БД.
      * @throws UnknownItemException - возникает в случае, если объект с указанным id не найден.
      */
-    public void renameSkill(int id, @NonNull String name) throws RepositoryException, UnknownItemException {
+    public Skill renameSkill(int id, @NonNull String name) throws RepositoryException, UnknownItemException {
         if (name.equals("")){
             newThrowIllegalArgumentException("name(название навыка)");
         }
         Skill updateSkill = new Skill(id, name);
-        repository.update(updateSkill);
+       return repository.update(updateSkill);
     }
 
     /**

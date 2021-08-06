@@ -1,50 +1,61 @@
 package controller;
 
+import model.Skill;
 import repository.impl.SkillRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 import service.SkillService;
-import view.View;
+
+import java.util.List;
 
 public class SkillController {
     private final SkillService service = new SkillService(new SkillRepositoryImpl());
-    private final View view = new View();
 
-    public void printSkill(){
-        int index = view.inputInt("Введите индекс навыка: ");
+    public Skill getSkill(int id) {
+        Skill result = null;
         try {
-            System.out.println(service.getSkill(index));
+            result = service.getSkill(id);
         } catch (UnknownItemException | RepositoryException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
+        return result;
     }
 
-    public void addSkill() {
-        String nameSkill = view.inputText("Имя навыка: ", false);
+    public Skill addSkill(String nameSkill) {
+        Skill result = null;
         try {
-            service.addSkill(nameSkill);
-        } catch (RepositoryException | IllegalArgumentException e) {
+           result = service.addSkill(nameSkill);
+        } catch (RepositoryException e) {
             System.out.println(e.getMessage());
         }
+        return result;
     }
 
-    public void renameSkill() {
-        int index = view.inputInt("Введите индекс навыка: ");
-        String name = view.inputText("Введите новое имя навыка: ", false);
-
+    public Skill renameSkill(int index, String name) {
+        Skill result = null;
         try {
-            service.renameSkill(index, name);
+           result = service.renameSkill(index, name);
         } catch (RepositoryException | IllegalArgumentException | UnknownItemException e) {
             System.out.println(e.getMessage());
         }
+        return result;
     }
 
-    public void deleteSkill() {
-        int index = view.inputInt("Введите индекс навыка: ");
+    public void deleteSkill(int index) {
         try {
             service.deleteSkill(index);
         } catch (RepositoryException | UnknownItemException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public List<Skill> getAllSkills(){
+        List<Skill> result = null;
+        try {
+            result = service.getAllSkills();
+        } catch (RepositoryException e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
     }
 }

@@ -8,89 +8,92 @@ import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 import service.DeveloperService;
 import service.SkillService;
-import view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DeveloperController {
 
-    private final View view = new View();
-    private final DeveloperService developerService = new DeveloperService(new DeveloperRepositoryImpl());
+    private final DeveloperService service = new DeveloperService(new DeveloperRepositoryImpl());
     private final SkillService skillService = new SkillService(new SkillRepositoryImpl());
 
-    public void addDeveloper() {
-        String lastName = view.inputText("Введите фамилию разработчика: ", false);
-        String firstName = view.inputText("Введите имя разработчика: ", false);
-        int teamId = view.inputInt("Введите id команды: ");
+    public Developer addDeveloper(Developer newDeveloper, List<Integer> skillIdList) {
+        Developer result = null;
         try {
-            Developer newDeveloper = new Developer(firstName, lastName, teamId, getListSkillByIdSkill());
-            developerService.addDeveloper(newDeveloper);
+            List<Skill> skills = getListSkillByIdSkill(skillIdList);
+            newDeveloper.setSkills(skills);
+            result = service.addDeveloper(newDeveloper);
+        } catch (RepositoryException | UnknownItemException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    public Developer getDeveloper(int id) {
+        Developer result = null;
+        try {
+            result = service.getDeveloper(id);
+        } catch (UnknownItemException | RepositoryException e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    public void deleteDeveloper(int id) {
+        try {
+            service.deleteDeveloper(id);
         } catch (RepositoryException | UnknownItemException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void printDeveloper(){
+    public Developer renameLastName(int id, String newLastName) {
+        Developer result = null;
         try {
-            view.printMessage(getDeveloperById().toString());
+            Developer developer = service.getDeveloper(id);
+            result = service.renameLastName(developer, newLastName);
+        } catch (RepositoryException | UnknownItemException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    public Developer renameFirstName(int id, String newFirstName) {
+        Developer result = null;
+        try {
+            Developer developer = service.getDeveloper(id);
+            result = service.renameFirstName(developer, newFirstName);
+        } catch (RepositoryException | UnknownItemException | IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    public void editSkillForDeveloper(int id, List<Integer> skillIdList) {
+        try {
+            Developer developer = service.getDeveloper(id);
+            List<Skill> skills = getListSkillByIdSkill(skillIdList);
+            service.setListSkills(developer, skills);
         } catch (RepositoryException | UnknownItemException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void deleteDeveloper(){
-        int id = view.inputInt("Введите идентификатор разработчика: ");
+    public List<Developer> getAllDeveloper(){
+        List<Developer> result = null;
         try {
-            developerService.deleteDeveloper(id);
-        } catch (RepositoryException | UnknownItemException | IllegalArgumentException e) {
+            result = service.getAllDevelopers();
+        } catch (RepositoryException e) {
             System.out.println(e.getMessage());
         }
+        return result;
     }
 
-    public void renameLastName(){
-        String lastName = view.inputText("Введите новую фамилию разработчика: ", false);
-        try {
-            developerService.renameLastName(getDeveloperById(), lastName);
-        } catch (RepositoryException | UnknownItemException | IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+    private List<Skill> getListSkillByIdSkill(List<Integer> skillIdList) throws RepositoryException, UnknownItemException {
+        List<Skill> result = new ArrayList<>();
+        for (int id : skillIdList) {
+            result.add(skillService.getSkill(id));
         }
-    }
-
-    public void renameFirstName(){
-        String firstName = view.inputText("Введите новое имя разработчика: ", false);
-        try {
-            developerService.renameFirstName(getDeveloperById(), firstName);
-        } catch (RepositoryException | UnknownItemException | IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void editSkillForDeveloper(){
-        view.printMessage("Введите идентификатор разработчика и идентификаторы скилов, которые должны иметься у данного разработчика");
-        try {
-            developerService.setListSkills(getDeveloperById(), getListSkillByIdSkill());
-        } catch (RepositoryException | UnknownItemException | IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private Developer getDeveloperById() throws RepositoryException, UnknownItemException {
-        int id = view.inputInt("Введите идентификатор разработчика: ");
-        return developerService.getDeveloper(id);
-    }
-
-    private List<Skill> getListSkillByIdSkill() throws RepositoryException, UnknownItemException {
-        List<Skill> skillList = new ArrayList<>();
-        String skillsIdStr = view.inputText("Введите id скилов через пробел: ", true);
-        if (skillsIdStr.equals("")){
-            return skillList;
-        }
-        String[] skillIdArr = skillsIdStr.split(" ");
-        for (String skill: skillIdArr){
-            int indexSkill = Integer.parseInt(skill);
-            skillList.add(skillService.getSkill(indexSkill));
-        }
-        return skillList;
+        return result;
     }
 }

@@ -1,26 +1,27 @@
 package controller;
 
+import model.Team;
 import repository.impl.TeamRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 import service.TeamService;
-import view.View;
+
+import java.util.List;
 
 public class TeamController {
     private final TeamService service = new TeamService(new TeamRepositoryImpl());
-    private final View view = new View();
 
-    public void printTeam() {
-        int id = view.inputInt("Введите идентификатор команды: ");
+    public Team getTeam(int id) {
+        Team result = null;
         try {
-            System.out.println(service.getTeam(id));
+           result = service.getTeam(id);
         } catch (UnknownItemException | RepositoryException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
+        return result;
     }
 
-    public void deleteTeam() {
-        int id = view.inputInt("Введите идентификатор команды: ");
+    public void deleteTeam(int id) {
         try {
             service.deleteTeam(id);
         } catch (RepositoryException | UnknownItemException | IllegalArgumentException e) {
@@ -28,34 +29,33 @@ public class TeamController {
         }
     }
 
-    public void createTeam() {
+    public Team createTeam(boolean status) {
+        Team result = null;
         try {
-            int id = 0;
-            id = service.create(getStatusTeam());
-            view.printMessage("Создана команда id " + id);
+            result = service.create(status);
         } catch (RepositoryException | IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
+        return result;
     }
 
-    public void updateStatusTeam() {
-        int id = view.inputInt("Введите идентификатор команды: ");
+    public Team updateStatusTeam(int id, boolean status) {
+        Team result = null;
         try {
-            boolean status = getStatusTeam();
-            service.updateStatus(id, status);
+           result = service.updateStatus(id, status);
         } catch (RepositoryException | IllegalArgumentException | UnknownItemException e) {
             System.out.println(e.getMessage());
         }
+        return result;
     }
 
-    private boolean getStatusTeam() {
-        int status = view.inputInt("Введите значение соответствующий статусу команды. ACTIVE - 1, DELETED - 2 : ");
-        if (status == 1) {
-            return true;
-        } else if (status == 2) {
-            return false;
-        } else {
-            throw new IllegalArgumentException("Некорректно введено значение");
+    public List<Team> getAllTeams(){
+        List<Team> result = null;
+        try {
+            result = service.getAllTeams();
+        } catch (RepositoryException e) {
+            System.out.println(e.getMessage());;
         }
+        return result;
     }
 }

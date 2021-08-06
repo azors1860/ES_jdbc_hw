@@ -52,10 +52,10 @@ public class TeamServiceTest {
     @Test
     public void testCreateTeam() throws RepositoryException {
         service.create(true);
-        verify(repository).createAndReturnId(new Team(0, null, TeamStatus.ACTIVE));
+        verify(repository).create(new Team(0, null, TeamStatus.ACTIVE));
 
         service.create(false);
-        verify(repository).createAndReturnId(new Team(0, null, TeamStatus.DELETED));
+        verify(repository).create(new Team(0, null, TeamStatus.DELETED));
     }
 
     @Test
