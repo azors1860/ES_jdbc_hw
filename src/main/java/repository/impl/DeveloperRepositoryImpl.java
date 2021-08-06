@@ -19,6 +19,11 @@ public class DeveloperRepositoryImpl implements DeveloperRepository<Developer> {
     private final String UPDATE_DEVELOPER = "UPDATE developer SET firstName = ?, lastName = ?, team_id = ? WHERE id = ?;";
     private final String DELETE_DEVELOPER = "DELETE FROM developer WHERE ID = ?;";
     private final String DELETE_ALL_SKILLS_FOR_DEVELOPER = "DELETE FROM developer_skill WHERE developer_id = ?;";
+    private final String SELECT_ALL_DEVELOPERS =
+            "SELECT developer.id as id, firstname, lastname, name as skill, skill.id as skill_id, team_id " +
+                    "FROM developer " +
+                    "LEFT JOIN developer_skill on(developer.id=developer_skill.developer_id) " +
+                    "LEFT JOIN skill on(developer_skill.skill_id=skill.id);";
     private final String SELECT_DEVELOPER =
             "SELECT developer.id as id, firstname, lastname, name as skill, skill.id as skill_id, team_id " +
                     "FROM developer " +
@@ -152,6 +157,46 @@ public class DeveloperRepositoryImpl implements DeveloperRepository<Developer> {
         } catch (SQLException throwables) {
             throw new RepositoryException("Возникла ошибка при удалении разработчика", throwables);
         }
+    }
+
+    @Override
+    public List<Developer> getAllItems() throws RepositoryException {
+        List<Developer> result = new ArrayList<>();
+        try (Connection connection = DataSourcePool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_DEVELOPERS)) {
+            ResultSet resultSet = statement.executeQuery();
+            int id = 0;
+            int teamId = 0;
+            String firsName = null;
+            String lastName = null;
+            List<Skill> skills = null;
+            while (resultSet.next()) {
+                int tempId = resultSet.getInt("id");
+                if (id != tempId) {
+
+                    if (id != 0) {
+                        result.add(new Developer(id, lastName, firsName, teamId, skills));
+                    }
+                    id = tempId;
+                    teamId = resultSet.getInt("team_id");
+                    firsName = resultSet.getString("firstname");
+                    lastName = resultSet.getString("lastname");
+                    skills = new ArrayList<>();
+                }
+                int skillId = resultSet.getInt("skill_id");
+                String skill = resultSet.getString("skill");
+                if (skill != null){
+                    skills.add(new Skill(skillId, skill));
+                }
+            }
+            if (id != 0) {
+                result.add(new Developer(id, lastName, firsName, teamId, skills));
+            }
+
+        } catch (SQLException throwables) {
+            throw new RepositoryException("Возникла ошибка при получении списка разработчиков", throwables);
+        }
+        return result;
     }
 
     /**

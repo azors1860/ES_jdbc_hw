@@ -3,6 +3,8 @@ package repository;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 
+import java.util.List;
+
 public interface Repository<T> {
     /**
      * Создать объект в базе данных.
@@ -36,4 +38,11 @@ public interface Repository<T> {
      * @throws UnknownItemException - возникает в случае, если объект с указанным id не найден.
      */
     void delete(int id) throws RepositoryException, UnknownItemException;
+
+    /**
+     * Получить все сущности из базы данных.
+     * @return - list с сущностями.
+     * @throws RepositoryException - возникает в случае проблем с БД.
+     */
+    List<T> getAllItems() throws RepositoryException;
 }

@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SkillRepositoryImpl implements SkillRepository<Skill> {
 
@@ -18,6 +20,7 @@ public class SkillRepositoryImpl implements SkillRepository<Skill> {
     private final String SELECT_SKILL = "SELECT * FROM skill WHERE id = ?";
     private final String UPDATE_SKILL = "UPDATE skill SET name = ? WHERE id = ?;";
     private final String DELETE_SKILL = "DELETE FROM skill WHERE ID = ?;";
+    private final String SELECT_ALL_SKILLS = "SELECT * FROM skill";
 
     @Override
     public void create(@NonNull Skill item) throws RepositoryException {
@@ -86,5 +89,24 @@ public class SkillRepositoryImpl implements SkillRepository<Skill> {
         } catch (SQLException throwables) {
             throw new RepositoryException("Возникла ошибка при удалении навыка", throwables);
         }
+    }
+
+    @Override
+    public List<Skill> getAllItems() throws RepositoryException {
+        List<Skill> result = new ArrayList<>();
+        try (Connection connection = DataSourcePool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_SKILLS)) {
+            ResultSet resultSet = statement.executeQuery();
+            int id = 0;
+            String name = null;
+            while (resultSet.next()) {
+                id = resultSet.getInt("id");
+                name = resultSet.getString("name");
+                result.add(new Skill(id, name));
+            }
+        } catch (SQLException throwables) {
+            throw new RepositoryException("Возникла ошибка при получении списка навыков", throwables);
+        }
+        return result;
     }
 }

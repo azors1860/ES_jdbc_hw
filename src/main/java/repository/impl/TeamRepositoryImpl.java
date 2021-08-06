@@ -23,8 +23,12 @@ public class TeamRepositoryImpl implements TeamRepository<Team> {
     private final String INSERT_TEAM = "INSERT INTO team (team_status) values (?)";
     private final String DELETE_TEAM = "DELETE FROM team WHERE ID = ?;";
     private final String UPDATE_TEAM = "UPDATE team SET team_status = ? WHERE id = ?;";
-    private final String SELECT_TEAM = "SELECT t.id as team_id, d.id as developer_id, team_status FROM team AS t\n" +
-            "LEFT JOIN developer AS d on(t.id=d.team_id)\n" +
+    private final String SELECT_ALL_TEAMS =
+            "SELECT t.id as team_id, d.id as developer_id, team_status FROM team AS t " +
+            "LEFT JOIN developer AS d on(t.id=d.team_id);";
+    private final String SELECT_TEAM =
+            "SELECT t.id as team_id, d.id as developer_id, team_status FROM team AS t " +
+            "LEFT JOIN developer AS d on(t.id=d.team_id) " +
             "WHERE t.id = ?;";
 
     @Override
@@ -96,6 +100,41 @@ public class TeamRepositoryImpl implements TeamRepository<Team> {
         } catch (SQLException throwables) {
             throw new RepositoryException("Возникла ошибка при удалении команды", throwables);
         }
+    }
+
+    @Override
+    public List<Team> getAllItems() throws RepositoryException {
+        List<Team> result = new ArrayList<>();
+        try (Connection connection = DataSourcePool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_TEAMS)) {
+
+            int id = 0;
+            ResultSet resultSet = statement.executeQuery();
+            List<Developer> developers = null;
+            String status = null;
+
+            while (resultSet.next()) {
+                int tempId = resultSet.getInt("team_id");
+                if (tempId != id){
+                    if (id != 0){
+                        result.add(new Team(id, developers, TeamStatus.valueOf(status)));
+                    }
+                    id = tempId;
+                    status = resultSet.getString("team_status");
+                    developers = new ArrayList<>();
+                }
+                int idDeveloper = resultSet.getInt("developer_id");
+                developers.add(developerRepository.read(idDeveloper));
+            }
+
+            if (id != 0){
+                result.add(new Team(id, developers, TeamStatus.valueOf(status)));
+            }
+
+        } catch (SQLException | UnknownItemException throwables) {
+            throw new RepositoryException("Возникла ошибка при получении списка команд", throwables);
+        }
+        return result;
     }
 
     /**
