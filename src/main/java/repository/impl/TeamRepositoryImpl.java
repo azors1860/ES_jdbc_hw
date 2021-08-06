@@ -32,18 +32,23 @@ public class TeamRepositoryImpl implements TeamRepository<Team> {
             "WHERE t.id = ?;";
 
     @Override
-    public void create(@NonNull Team item) throws RepositoryException {
+    public Team create(@NonNull Team item) throws RepositoryException {
         try (Connection connection = DataSourcePool.getConnection();
-             PreparedStatement statement = connection.prepareStatement(INSERT_TEAM)) {
+             PreparedStatement statement = connection.prepareStatement(INSERT_TEAM, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, item.getStatus().toString());
             statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet.next();
+            int index = resultSet.getInt(1);
+            item.setId(index);
         } catch (SQLException throwables) {
             throw new RepositoryException("Возникла ошибка при создании команды", throwables);
         }
+        return item;
     }
 
     @Override
-    public void update(@NonNull Team item) throws RepositoryException, UnknownItemException {
+    public Team update(@NonNull Team item) throws RepositoryException, UnknownItemException {
         try (Connection connection = DataSourcePool.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_TEAM)) {
             statement.setString(1, item.getStatus().toString());
@@ -55,6 +60,7 @@ public class TeamRepositoryImpl implements TeamRepository<Team> {
         } catch (SQLException throwables) {
             throw new RepositoryException("Возникла ошибка при изменении команды", throwables);
         }
+        return item;
     }
 
     @Override
@@ -135,26 +141,5 @@ public class TeamRepositoryImpl implements TeamRepository<Team> {
             throw new RepositoryException("Возникла ошибка при получении списка команд", throwables);
         }
         return result;
-    }
-
-    /**
-     * Создать новую команду и вернуть id созданной команды.
-     *
-     * @param item - Команда для создания в базе данных.
-     * @return - идентификатор созданной команды.
-     */
-    public int createAndReturnId(@NonNull Team item) throws RepositoryException {
-        int id = 0;
-        try (Connection connection = DataSourcePool.getConnection();
-             PreparedStatement statement = connection.prepareStatement(INSERT_TEAM, Statement.RETURN_GENERATED_KEYS)) {
-            statement.setString(1, item.getStatus().toString());
-            statement.executeUpdate();
-            ResultSet resultSet = statement.getGeneratedKeys();
-            resultSet.next();
-            id = resultSet.getInt(1);
-        } catch (SQLException throwables) {
-            throw new RepositoryException("Возникла ошибка при создании команды", throwables);
-        }
-        return id;
     }
 }

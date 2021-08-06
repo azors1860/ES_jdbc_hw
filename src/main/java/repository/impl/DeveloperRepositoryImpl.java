@@ -32,44 +32,42 @@ public class DeveloperRepositoryImpl implements DeveloperRepository<Developer> {
                     "WHERE developer.id = ?";
 
     @Override
-    public void create(@NonNull Developer item) throws RepositoryException {
+    public Developer create(@NonNull Developer item) throws RepositoryException {
         Connection connection = null;
-        PreparedStatement statement = null;
+
         try {
-            try {
-                connection = DataSourcePool.getConnection();
-                statement = connection.prepareStatement(INSERT_DEVELOPER, Statement.RETURN_GENERATED_KEYS);
-                connection.setAutoCommit(false);
-                statement.setString(1, item.getFirstName());
-                statement.setString(2, item.getLastName());
-                statement.setInt(3, item.getTeamId());
-                statement.executeUpdate();
-                ResultSet resultSet = statement.getGeneratedKeys();
-                resultSet.next();
-                int index = resultSet.getInt(1);
-                addSkillsForDeveloper(connection, index, item.getSkills());
-                connection.commit();
-            } catch (SQLException throwables) {
-                String messageEx = "Возникла ошибка при создании разработчика. " + throwables.getMessage();
-                if (throwables.getMessage().contains("developer_team_fkey")) {
-                    messageEx += " Убедитесь что идентификатор команды введен верно";
-                }
-                throw new RepositoryException(messageEx, throwables);
-            } finally {
-                if (connection != null) {
-                    connection.close();
-                }
-                if (statement != null) {
-                    statement.close();
+            connection = DataSourcePool.getConnection();
+            PreparedStatement statement = connection.prepareStatement(INSERT_DEVELOPER, Statement.RETURN_GENERATED_KEYS);
+            connection.setAutoCommit(false);
+            statement.setString(1, item.getFirstName());
+            statement.setString(2, item.getLastName());
+            statement.setInt(3, item.getTeamId());
+            statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet.next();
+            int index = resultSet.getInt(1);
+            item.setId(index);
+            addSkillsForDeveloper(connection, index, item.getSkills());
+            connection.commit();
+        } catch (SQLException throwables) {
+            String messageEx = "Возникла ошибка при создании разработчика. " + throwables.getMessage();
+            if (throwables.getMessage().contains("developer_team_fkey")) {
+                messageEx += " Убедитесь что идентификатор команды введен верно";
+            }
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException e) {
+                    throw new RepositoryException(messageEx, throwables);
                 }
             }
-        } catch (SQLException e) {
-            throw new RepositoryException("Произошла обишка при создании разработчика", e);
+            throw new RepositoryException(messageEx, throwables);
         }
+        return item;
     }
 
     @Override
-    public void update(@NonNull Developer item) throws RepositoryException {
+    public Developer update(@NonNull Developer item) throws RepositoryException {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
@@ -101,6 +99,7 @@ public class DeveloperRepositoryImpl implements DeveloperRepository<Developer> {
         } catch (SQLException e) {
             throw new RepositoryException("Возникла ошибка при изменении разработчика", e);
         }
+        return item;
     }
 
     @Override
@@ -185,7 +184,7 @@ public class DeveloperRepositoryImpl implements DeveloperRepository<Developer> {
                 }
                 int skillId = resultSet.getInt("skill_id");
                 String skill = resultSet.getString("skill");
-                if (skill != null){
+                if (skill != null) {
                     skills.add(new Skill(skillId, skill));
                 }
             }

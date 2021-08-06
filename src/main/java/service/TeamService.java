@@ -6,6 +6,8 @@ import repository.impl.TeamRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 
+import java.util.List;
+
 public class TeamService {
     private final TeamRepositoryImpl repository;
 
@@ -43,7 +45,9 @@ public class TeamService {
      * @throws RepositoryException - возникает в случае проблем с БД.
      */
     public int create(boolean status) throws RepositoryException {
-        return repository.createAndReturnId(new Team(0, null, getTeamStatus(status)));
+        return repository
+                .create(new Team(0, null, getTeamStatus(status)))
+                .getId();
     }
 
     /**
@@ -56,6 +60,15 @@ public class TeamService {
     public void updateStatus(int id, boolean status) throws RepositoryException, UnknownItemException {
         Team team = new Team(id, getTeamStatus(status));
         repository.update(team);
+    }
+
+    /**
+     * Получить все команды из БД.
+     * @return - Список всех команд.
+     * @throws RepositoryException - возникает в случае проблем с БД.
+     */
+    public List<Team> getAllTeams() throws RepositoryException {
+        return repository.getAllItems();
     }
 
     /**

@@ -112,6 +112,15 @@ public class DeveloperService {
         repository.delete(id);
     }
 
+    /**
+     * Получить всех разработчиков из БД.
+     * @return - Список всех разработчиков
+     * @throws RepositoryException  - возникает в случае проблем с БД.
+     */
+    public List<Developer> getAllDevelopers() throws RepositoryException {
+       return repository.getAllItems();
+    }
+
     private void newThrowIllegalArgumentException(String nameStr) {
         throw new IllegalArgumentException("Строка " + nameStr + " не может быть пустой!");
     }

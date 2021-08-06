@@ -7,10 +7,7 @@ import repository.SkillRepository;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,21 +20,26 @@ public class SkillRepositoryImpl implements SkillRepository<Skill> {
     private final String SELECT_ALL_SKILLS = "SELECT * FROM skill";
 
     @Override
-    public void create(@NonNull Skill item) throws RepositoryException {
+    public Skill create(@NonNull Skill item) throws RepositoryException {
         if (item == null) {
             throw new RuntimeException("Объект не существует");
         }
         try (Connection connection = DataSourcePool.getConnection();
-             PreparedStatement statement = connection.prepareStatement(INSERT_SKILL)) {
+             PreparedStatement statement = connection.prepareStatement(INSERT_SKILL, Statement.RETURN_GENERATED_KEYS)){
             statement.setString(1, item.getName());
             statement.execute();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            resultSet.next();
+            int index = resultSet.getInt(1);
+            item.setId(index);
         } catch (SQLException throwables) {
             throw new RepositoryException("Возникла ошибка при создании навыка", throwables);
         }
+        return item;
     }
 
     @Override
-    public void update(@NonNull Skill item) throws RepositoryException, UnknownItemException {
+    public Skill update(@NonNull Skill item) throws RepositoryException, UnknownItemException {
         try (Connection connection = DataSourcePool.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_SKILL)) {
             statement.setString(1, item.getName());
@@ -49,6 +51,7 @@ public class SkillRepositoryImpl implements SkillRepository<Skill> {
         } catch (SQLException throwables) {
             throw new RepositoryException("Возникла ошибка при изменении навыка", throwables);
         }
+        return item;
     }
 
     @Override

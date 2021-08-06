@@ -6,6 +6,8 @@ import repository.impl.SkillRepositoryImpl;
 import repository.exception.RepositoryException;
 import repository.exception.UnknownItemException;
 
+import java.util.List;
+
 public class SkillService {
 
     private final SkillRepositoryImpl repository;
@@ -60,6 +62,14 @@ public class SkillService {
      */
     public Skill getSkill(int id) throws UnknownItemException, RepositoryException {
        return repository.read(id);
+    }
+
+    /**
+     * Получить все навыки из БД.
+     * @throws RepositoryException - возникает в случае проблем с БД.
+     */
+    public List<Skill> getAllSkills() throws RepositoryException {
+       return repository.getAllItems();
     }
 
     private void newThrowIllegalArgumentException(String nameStr){
